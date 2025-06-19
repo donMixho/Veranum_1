@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Reservas | Veranum</title>
+    <link rel="icon" href="favicon.ico" type="image/x-icon" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <script
+      src="https://kit.fontawesome.com/7f6b57d7c3.js"
+      crossorigin="anonymous"
+    ></script>
+    <style>
+      :root {
+        --color-bg: #18181c;
+        --color-panel: #100f0f;
+        --color-card: #131314;
+        --color-white: #f9f9f9;
+        --color-gray: #bababe;
+        --color-accent: #e3a13b;
+        --color-accent-hover: #ffb74d;
+        --color-shadow: rgba(0, 0, 0, 0.2);
+        --radius: 18px;
+        --transition: 0.3s cubic-bezier(0.6, 0.1, 0.4, 1.2);
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: "Montserrat", Arial, sans-serif;
+        background: var(--color-bg);
+        color: var(--color-white);
+        scroll-behavior: smooth;
+      }
+      body {
+        animation: fadeInBody 0.8s;
+      }
+      @keyframes fadeInBody {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+      h1,
+      h2,
+      h3 {
+        font-weight: 700;
+      }
+      .topbar {
+        background: #101013;
+        color: var(--color-gray);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 0.95rem;
+        padding: 0.45rem 2.5vw;
+        border-bottom: 1.5px solid #222;
+        position: sticky;
+        top: 0;
+        z-index: 30;
+        animation: fadeInDown 0.7s;
+      }
+      @keyframes fadeInDown {
+        from {
+          opacity: 0;
+          transform: translateY(-25px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      .topbar-contact {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 2vw;
+      }
+      .topbar-contact span {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+      }
+      .topbar-search {
+        display: flex;
+        align-items: center;
+        min-width: 170px;
+        width: 230px;
+        justify-content: flex-end;
+      }
+      .topbar-search input {
+        width: 100%;
+        background: var(--color-panel);
+        color: var(--color-white);
+        border: none;
+        border-radius: 8px;
+        padding: 0.35em 0.9em;
+        font-size: 0.98rem;
+        transition: box-shadow 0.3s;
+      }
+      .topbar-search input:focus {
+        outline: none;
+        box-shadow: 0 0 12px 1px var(--color-accent-hover);
+      }
+      header {
+        background: var(--color-bg);
+        box-shadow: 0 4px 24px -8px var(--color-shadow);
+        padding: 0.8rem 0;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        position: sticky;
+        top: 38px;
+        z-index: 25;
+        animation: fadeInDown 0.7s 0.2s both;
+      }
+      .logo-title {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        margin-left: 2vw;
+      }
+      .logo-title img {
+        height: 50px;
+        width: 50px;
+        border-radius: 50%;
+        background: #222;
+        object-fit: cover;
+        border: 2.5px solid var(--color-accent);
+        box-shadow: 0 2px 18px -5px var(--color-accent-hover);
+      }
+      .logo-title span {
+        color: var(--color-white);
+        font-size: 2rem;
+        letter-spacing: 1.2px;
+        font-weight: 700;
+        text-shadow: 0 2px 14px #000b;
+      }
+      nav ul {
+        list-style: none;
+        display: flex;
+        gap: 1.1vw;
+        margin: 0 2vw;
+        padding: 0;
+        align-items: center;
+      }
+      nav li {
+        position: relative;
+        padding: 0.3em 0.6em;
+        transition: transform 0.12s;
+      }
+      nav li.active a,
+      nav li a:hover {
+        color: var(--color-accent);
+        transition: color var(--transition);
+      }
+      nav li.active::after,
+      nav li a:hover::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: -4px;
+        height: 3px;
+        background: linear-gradient(
+          90deg,
+          var(--color-accent),
+          var(--color-accent-hover)
+        );
+        border-radius: 2px;
+        transition: opacity var(--transition);
+        opacity: 1;
+      }
+      nav li:hover {
+        transform: scale(1.07);
+      }
+      /* --- MAIN RESERVA --- */
+      .reserva-hero {
+        background: url("img/reserva-hero.jpg") center/cover no-repeat;
+        min-height: 200px;
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        padding: 3vw 8vw 2vw 6vw;
+        box-shadow: 0 2px 28px -9px var(--color-shadow);
+        position: relative;
+      }
+      .reserva-hero::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: rgba(20, 18, 18, 0.73);
+        z-index: 1;
+      }
+      .reserva-hero-content {
+        position: relative;
+        z-index: 2;
+        color: var(--color-accent-hover);
+        max-width: 600px;
+      }
+      .reserva-hero-content h1 {
+        font-size: 2.4em;
+        margin-bottom: 0.3em;
+        text-shadow: 0 2px 20px #000b;
+      }
+      .reserva-hero-content p {
+        font-size: 1.12em;
+        color: var(--color-white);
+        margin-top: 0.4em;
+        text-shadow: 0 2px 12px #000c;
+      }
+      .reserva-hero-content img {
+        width: 72px;
+        height: 72px;
+        border-radius: 18px;
+        margin-right: 16px;
+        box-shadow: 0 4px 28px -5px var(--color-accent-hover);
+        vertical-align: middle;
+      }
+      /* Formulario */
+      .form-section {
+        background: var(--color-panel);
+        margin: 0 auto;
+        border-radius: var(--radius);
+        max-width: 620px;
+        padding: 2.5em 2.2em 2em 2.2em;
+        margin-top: -55px;
+        box-shadow: 0 6px 48px -12px var(--color-accent-hover), 0 0 40px #0005;
+        position: relative;
+        z-index: 10;
+        animation: fadeInBody 1s;
+      }
+      .form-section h2 {
+        color: var(--color-accent);
+        margin-bottom: 1.4em;
+        text-align: center;
+        font-size: 1.35em;
+        letter-spacing: 0.4px;
+      }
+      .form-reserva label {
+        display: block;
+        color: var(--color-white);
+        font-size: 1em;
+        margin-bottom: 1.2em;
+      }
+      .form-reserva input,
+      .form-reserva select {
+        width: 100%;
+        background: var(--color-card);
+        color: var(--color-white);
+        border: none;
+        border-radius: 8px;
+        padding: 0.8em 1.2em;
+        margin-top: 0.4em;
+        font-size: 1em;
+        outline: none;
+        box-shadow: 0 1px 6px -2px var(--color-shadow);
+        transition: box-shadow 0.19s;
+      }
+      .form-reserva input:focus,
+      .form-reserva select:focus {
+        box-shadow: 0 0 8px 1px var(--color-accent-hover);
+      }
+      .btn-main {
+        display: inline-block;
+        padding: 0.75em 2em;
+        background: linear-gradient(
+          90deg,
+          var(--color-accent),
+          var(--color-accent-hover)
+        );
+        color: var(--color-bg);
+        font-size: 1.1em;
+        font-weight: 700;
+        border: none;
+        border-radius: 13px;
+        box-shadow: 0 4px 42px 0 var(--color-accent), 0 0 55px 0 #e3a13b88;
+        cursor: pointer;
+        margin-top: 1.4em;
+        letter-spacing: 0.5px;
+        text-align: center;
+        filter: drop-shadow(0 0 20px #e3a13b70);
+        transition: background var(--transition), transform 0.14s;
+        animation: popBtn 0.5s;
+      }
+      .btn-main:hover {
+        background: linear-gradient(
+          90deg,
+          var(--color-accent-hover),
+          var(--color-accent)
+        );
+        transform: scale(1.055);
+        box-shadow: 0 6px 52px 1px var(--color-accent-hover),
+          0 0 55px 1px #ffb74d88;
+        filter: brightness(1.05) drop-shadow(0 0 22px #ffb74d);
+      }
+      @keyframes popBtn {
+        0% {
+          transform: scale(0.93);
+        }
+        60% {
+          transform: scale(1.09);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+      /* Galería intuitiva */
+      .gallery-intuitiva {
+        display: flex;
+        justify-content: center;
+        gap: 2vw;
+        margin: 3vw auto 4vw auto; /* AUMENTADO el margen inferior */
+        flex-wrap: wrap;
+        max-width: 1050px;
+        animation: fadeInBody 1.3s;
+      }
+      .gallery-item {
+        background: var(--color-card);
+        border-radius: var(--radius);
+        overflow: hidden;
+        box-shadow: 0 4px 22px -10px var(--color-shadow);
+        text-align: center;
+        transition: transform 0.17s, box-shadow 0.21s;
+        margin-bottom: 1vw;
+        min-width: 220px;
+        max-width: 270px;
+        flex: 1;
+        animation: fadeInCard 1.2s;
+      }
+      .gallery-item img {
+        width: 100%;
+        height: 140px;
+        object-fit: cover;
+        border-top-left-radius: var(--radius);
+        border-top-right-radius: var(--radius);
+        filter: brightness(0.9) contrast(1.1);
+        transition: filter 0.27s;
+      }
+      .gallery-item:hover {
+        transform: translateY(-7px) scale(1.045);
+        box-shadow: 0 10px 44px -10px var(--color-accent-hover);
+      }
+      .gallery-item .icono {
+        color: var(--color-accent);
+        font-size: 2.2em;
+        margin-top: 1.1em;
+        margin-bottom: 0.7em;
+      }
+      .gallery-item h4 {
+        color: var(--color-accent-hover);
+        font-size: 1.18em;
+        margin-bottom: 0.5em;
+      }
+      .gallery-item p {
+        color: var(--color-gray);
+        font-size: 0.99em;
+        padding: 0 1.2em 1.2em 1.2em;
+      }
+      /* Footer igual que index */
+      footer {
+        background: #0e0e0f;
+        padding: 2vw 0 0.7vw 0;
+        color: var(--color-gray);
+        font-size: 0.98em;
+        border-top: 1.5px solid #222;
+        margin-top: 4vw;
+      }
+      .footer-grid {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-around;
+        align-items: flex-start;
+        gap: 2vw;
+        padding: 0 3vw 0.7vw 3vw;
+      }
+      .footer-logo img {
+        height: 37px;
+        filter: drop-shadow(0 2px 10px var(--color-shadow));
+        margin-bottom: 8px;
+      }
+      .footer-links ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+      .footer-links li {
+        margin-bottom: 0.25em;
+      }
+      .footer-links a:hover {
+        color: var(--color-accent-hover);
+        text-decoration: underline;
+        transition: color var(--transition);
+      }
+      .footer-contact p {
+        margin: 0 0 7px 0;
+        font-size: 1em;
+      }
+      .footer-social a {
+        font-size: 1.35em;
+        color: var(--color-accent);
+        margin-right: 0.6em;
+        transition: color 0.19s;
+      }
+      .footer-social a:hover {
+        color: var(--color-accent-hover);
+      }
+      .footer-bottom {
+        text-align: center;
+        margin-top: 0.8vw;
+        color: var(--color-gray);
+        font-size: 0.95em;
+        opacity: 0.67;
+      }
+      @media (max-width: 980px) {
+        .gallery-intuitiva {
+          flex-direction: column;
+          gap: 2vw;
+        }
+        .footer-grid {
+          flex-direction: column;
+          gap: 1vw;
+        }
+        nav ul {
+          flex-wrap: wrap;
+          gap: 0.5vw;
+        }
+        .logo-title span {
+          font-size: 1.5rem;
+        }
+      }
+      @media (max-width: 640px) {
+        header,
+        .topbar {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+        nav ul {
+          flex-direction: column;
+          width: 100%;
+        }
+        .logo-title {
+          margin-left: 0;
+        }
+        .footer-grid {
+          padding: 0 2vw 1vw 2vw;
+        }
+        .gallery-item {
+          max-width: 99vw;
+        }
+        .form-section {
+          padding: 7vw 3vw;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Barra de contacto superior -->
+    <div class="topbar">
+      <div class="topbar-contact">
+        <span><i class="fa-solid fa-phone"></i> +56 9 1234 5678</span>
+        <span><i class="fa-solid fa-envelope"></i> contacto@veranum.cl</span>
+        <span
+          ><i class="fa-solid fa-location-dot"></i> Santiago & Viña del
+          Mar</span
+        >
+      </div>
+      <div class="topbar-search">
+        <input type="text" placeholder="Buscar..." />
+      </div>
+    </div>
+    <!-- Header y menú principal -->
+    <header>
+      <div class="logo-title">
+        <img
+          src="https://marketplace.canva.com/qBEpA/MAF7EsqBEpA/1/tl/canva-hotel-solid-icon-set-MAF7EsqBEpA.png"
+          alt="Logo Veranum"
+        />
+        <span>Veranum</span>
+      </div>
+      <nav>
+        <ul>
+          <li><a href="index.html">Inicio</a></li>
+          <li><a href="habitaciones.html">Habitaciones</a></li>
+          <li class="active"><a href="reservas.html">Reservas</a></li>
+          <li><a href="promociones.html">Promociones</a></li>
+          <li><a href="eventos.html">Eventos</a></li>
+          <li>
+            <a href="login.html"><i class="fa-solid fa-user"></i> Ingresar</a>
+          </li>
+          <li>
+            <a href="registro.html"
+              ><i class="fa-solid fa-user-plus"></i> Registrarse</a
+            >
+          </li>
+        </ul>
+      </nav>
+    </header>
+
+    <!-- Hero visual de reservas -->
+    <section class="reserva-hero">
+      <div class="reserva-hero-content">
+        <img
+          src="img/e509312a-6c9e-4f53-ae19-7067a95f6a66.png"
+          alt="Reserva"
+          loading="lazy"
+        />
+        <span style="font-size: 2em; vertical-align: middle"
+          ><i class="fa-solid fa-calendar-check"></i
+        ></span>
+        <h1>Reserva fácil y seguro<br />en Hotel VERANUM</h1>
+        <p>
+          ¡Completa tus datos para asegurar tu experiencia! <br />
+          Atención personalizada y confirmación inmediata.
+        </p>
+      </div>
+    </section>
+
+    <!-- Galería intuitiva y moderna para reserva -->
+    <div class="gallery-intuitiva">
+      <div class="gallery-item">
+        <img src="img/hotel_nocturno2.jpg" alt="Habitaciones" loading="lazy" />
+        <div class="icono"><i class="fa-solid fa-bed"></i></div>
+        <h4>Elige tu habitación</h4>
+        <p>
+          Selecciona el tipo y disfruta el máximo confort en todos nuestros
+          hoteles.
+        </p>
+      </div>
+      <div class="gallery-item">
+        <img
+          src="img/e509312a-6c9e-4f53-ae19-7067a95f6a66.png"
+          alt="Reserva en línea"
+          loading="lazy"
+        />
+        <div class="icono"><i class="fa-solid fa-laptop"></i></div>
+        <h4>Reserva en línea</h4>
+        <p>
+          Proceso 100% digital, seguro y con confirmación al instante por email.
+        </p>
+      </div>
+      <div class="gallery-item">
+        <img
+          src="img/reserva_promociones.jpg"
+          alt="Promociones"
+          loading="lazy"
+        />
+        <div class="icono"><i class="fa-solid fa-gift"></i></div>
+        <h4>Accede a promociones</h4>
+        <p>Aprovecha descuentos y beneficios exclusivos para reservas web.</p>
+      </div>
+    </div>
+
+    <!-- Sección de formulario de reserva -->
+    <section class="form-section" id="reservaFormSection">
+      <h2><i class="fa-solid fa-calendar-days"></i> Formulario de Reserva</h2>
+      <form class="form-reserva" id="formReserva" autocomplete="on">
+        <label>
+          Nombre completo
+          <input
+            type="text"
+            name="nombre"
+            required
+            placeholder="Tu nombre completo"
+          />
+        </label>
+        <label>
+          Correo electrónico
+          <input
+            type="email"
+            name="email"
+            required
+            placeholder="ejemplo@email.com"
+          />
+        </label>
+        <label>
+          Fecha de entrada
+          <input type="date" name="checkin" required />
+        </label>
+        <label>
+          Fecha de salida
+          <input type="date" name="checkout" required />
+        </label>
+        <label>
+          Tipo de habitación
+          <select name="room-type" required>
+            <option value="">Selecciona</option>
+            <option value="premium">Premium</option>
+            <option value="suite">Suite</option>
+            <option value="doble">Doble</option>
+            <option value="familiar">Familiar</option>
+          </select>
+        </label>
+        <button type="submit" class="btn-main">
+          <i class="fa-solid fa-paper-plane"></i> Confirmar Reserva
+        </button>
+      </form>
+      <!-- Mensaje de éxito -->
+      <div
+        id="msgSuccess"
+        style="display: none; text-align: center; margin-top: 30px"
+      >
+        <span style="font-size: 2.2em; color: var(--color-accent-hover)">
+          <i class="fa-solid fa-circle-check"></i>
+        </span>
+        <h2 style="color: var(--color-accent); margin-top: 10px">
+          ¡Reserva enviada!
+        </h2>
+        <p style="color: var(--color-white)">
+          Gracias por tu interés en Veranum.<br />Recibirás un correo de
+          confirmación pronto.
+        </p>
+        <a href="index.html" class="btn-main" style="margin-top: 14px"
+          >Volver al inicio</a
+        >
+      </div>
+    </section>
+
+    <!-- Footer igual que index -->
+    <footer>
+      <div class="footer-grid">
+        <div class="footer-logo">
+          <img
+            src="https://solarmadariagahotel.cl/wp-content/uploads/2019/06/sm-logotipo-blanco-1-1024x791.png"
+            alt="Hotel Veranum"
+          />
+        </div>
+        <div class="footer-links">
+          <ul>
+            <li><a href="index.html">Inicio</a></li>
+            <li><a href="habitaciones.html">Habitaciones</a></li>
+            <li><a href="reservas.html">Reservas</a></li>
+            <li><a href="promociones.html">Promociones</a></li>
+            <li><a href="eventos.html">Eventos</a></li>
+            <li><a href="login.html">Ingresar</a></li>
+            <li><a href="registro.html">Registrarse</a></li>
+          </ul>
+        </div>
+        <div class="footer-contact">
+          <p><i class="fa-solid fa-phone"></i> +56 9 1234 5678</p>
+          <p><i class="fa-solid fa-envelope"></i> contacto@veranum.cl</p>
+          <p>
+            <i class="fa-solid fa-location-dot"></i> Santiago & Viña del Mar
+          </p>
+        </div>
+        <div class="footer-social">
+          <a href="#" aria-label="Instagram"
+            ><i class="fa-brands fa-instagram"></i
+          ></a>
+          <a href="#" aria-label="Facebook"
+            ><i class="fa-brands fa-facebook-f"></i
+          ></a>
+          <a href="#" aria-label="X"><i class="fa-brands fa-x-twitter"></i></a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2024 VERANUM. Todos los derechos reservados.</p>
+      </div>
+    </footer>
+    <script>
+      // Lógica reserva: mostrar mensaje de éxito y ocultar form
+      document.getElementById("formReserva").onsubmit = function (e) {
+        e.preventDefault();
+        document.getElementById("formReserva").style.display = "none";
+        document.getElementById("msgSuccess").style.display = "block";
+        window.scrollTo({
+          top: document.getElementById("reservaFormSection").offsetTop - 50,
+          behavior: "smooth",
+        });
+      };
+    </script>
+  </body>
+</html>
